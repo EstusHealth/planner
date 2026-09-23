@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Weekly planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f3f4f2; --paper:#ffffff; --line:#c9ccc8; --ink:#262a27; --muted:#6b716c;
+  --side:#f1f3f0; --sage:#e3efe4; --sage-ink:#2f6a3c; --hover:#eef5ef;
+  --c1:#e3efe4; --c1i:#2f6a3c;
+  --c2:#e4ecf5; --c2i:#2c4f7a;
+  --c3:#f6ecdd; --c3i:#7a5320;
+  --c4:#efe6f3; --c4i:#5e3a72;
+  --c5:#f5e3e3; --c5i:#7c2f2f;
+  --c6:#ececec; --c6i:#444;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#171a18; --paper:#1f2320; --line:#3a403b; --ink:#e7eae7; --muted:#9aa29c;
+    --side:#252a26; --sage:#26392a; --sage-ink:#9fd3aa; --hover:#26302a;
+    --c1:#26392a; --c1i:#9fd3aa; --c2:#232f3d; --c2i:#9ec0e6;
+    --c3:#3a2f20; --c3i:#e3bf8a; --c4:#33283a; --c4i:#cfaee0;
+    --c5:#3b2626; --c5i:#e8a6a6; --c6:#2c2c2c; --c6i:#cfcfcf;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#171a18; --paper:#1f2320; --line:#3a403b; --ink:#e7eae7; --muted:#9aa29c;
+  --side:#252a26; --sage:#26392a; --sage-ink:#9fd3aa; --hover:#26302a;
+  --c1:#26392a; --c1i:#9fd3aa; --c2:#232f3d; --c2i:#9ec0e6;
+  --c3:#3a2f20; --c3i:#e3bf8a; --c4:#33283a; --c4i:#cfaee0;
+  --c5:#3b2626; --c5i:#e8a6a6; --c6:#2c2c2c; --c6i:#cfcfcf;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,Arial,Helvetica,sans-serif;font-size:15px;line-height:1.4}
+button,input{font:inherit;color:inherit}
+.wrap{max-width:1320px;margin:0 auto;padding:16px}
+.sheet{background:var(--paper);border:1px solid var(--line)}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.week{display:flex;align-items:center;gap:8px;font-size:20px;color:var(--muted);letter-spacing:.02em}
+.week input{border:0;border-bottom:1px solid var(--line);background:transparent;font-size:17px;padding:2px 4px;width:170px;color:var(--ink)}
+.hint{color:var(--muted);font-size:14px}
+.tools{display:flex;gap:8px}
+.btn{border:1px solid var(--line);background:var(--paper);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:14px}
+.btn:hover{background:var(--hover)}
+
+/* tray */
+.tray{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);min-height:58px}
+.tray-label{font-size:13px;color:var(--muted);margin-right:4px}
+.tray.drop-bin{background:var(--c5)}
+.tray.drop-bin .tray-label::after{content:" · drop here to remove"}
+.add{display:flex;gap:6px;align-items:center;margin-left:auto}
+.add input{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:5px 8px;width:150px;font-size:14px}
+.swatches{display:flex;gap:4px}
+.sw{width:20px;height:20px;border-radius:50%;border:1px solid var(--line);cursor:pointer;padding:0}
+.sw[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:1px}
+
+/* blocks */
+.chip,.block{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;border-radius:6px}
+.chip{padding:5px 10px;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.chip .x{opacity:0;border:0;background:none;cursor:pointer;padding:0 0 0 2px;font-size:14px;line-height:1}
+.chip:hover .x,.chip:focus-within .x{opacity:.6}
+.block{padding:6px 8px;margin-bottom:6px;position:relative}
+.block .t{font-weight:600;font-size:15px;outline:none;display:block;padding-right:18px;word-break:break-word}
+.block .s{font-size:12.5px;opacity:.85;display:flex;align-items:center;gap:4px;margin-top:2px}
+.block .s input{border:0;border-bottom:1px solid currentColor;background:transparent;width:64px;font-size:12.5px;padding:0;color:inherit}
+.block .del{position:absolute;top:4px;right:4px;border:0;background:none;cursor:pointer;opacity:0;font-size:14px;line-height:1;color:inherit}
+.block:hover .del,.block:focus-within .del{opacity:.6}
+.block .pin{border:0;background:none;cursor:pointer;padding:0;font-size:12px;color:inherit;opacity:.55;text-decoration:underline dotted}
+.block.anchor .pin{opacity:1;text-decoration:none;font-weight:600}
+.k1{background:var(--c1);color:var(--c1i)} .k2{background:var(--c2);color:var(--c2i)}
+.k3{background:var(--c3);color:var(--c3i)} .k4{background:var(--c4);color:var(--c4i)}
+.k5{background:var(--c5);color:var(--c5i)} .k6{background:var(--c6);color:var(--c6i)}
+.block.anchor{box-shadow:inset 3px 0 0 currentColor}
+
+/* grid */
+.scroll{overflow-x:auto}
+.grid{display:grid;grid-template-columns:120px repeat(7,minmax(128px,1fr));min-width:1020px}
+.h{padding:16px 8px;text-align:center;font-size:17px;letter-spacing:.03em;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.h.today{color:var(--sage-ink);font-weight:600}
+.rowh{background:var(--side);padding:12px;display:flex;align-items:center;font-size:16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.cell{min-height:130px;padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .12s}
+.grid>*:nth-child(8n){border-right:0}
+.cell.over{background:var(--hover);outline:2px dashed var(--sage-ink);outline-offset:-4px}
+
+/* bottom */
+.bottom{display:grid;grid-template-columns:repeat(3,1fr)}
+.panel{padding:14px 16px 20px;border-right:1px solid var(--line)}
+.panel:last-child{border-right:0}
+.panel h2{font-size:17px;font-weight:500;margin:0 0 12px;letter-spacing:.02em}
+.field{display:flex;gap:8px;align-items:baseline;margin-bottom:8px}
+.field label{white-space:nowrap}
+.field input{flex:1;min-width:0;border:0;border-bottom:1px solid var(--line);background:transparent;padding:2px 2px}
+.habits{display:grid;grid-template-columns:1fr repeat(7,26px);align-items:center;row-gap:6px}
+.habits .dl{text-align:center;font-size:14px}
+.habits input[type=text]{border:0;border-bottom:1px solid transparent;background:transparent;padding:2px 0;min-width:0}
+.habits input[type=text]:hover,.habits input[type=text]:focus{border-bottom-color:var(--line)}
+.box{width:18px;height:18px;margin:0 auto;border:1px solid var(--muted);background:transparent;cursor:pointer;padding:0;display:block;border-radius:2px}
+.box[aria-pressed="true"]{background:var(--sage-ink);border-color:var(--sage-ink)}
+.box[aria-pressed="true"]::after{content:"";display:block;width:5px;height:9px;border:solid var(--paper);border-width:0 2px 2px 0;transform:translate(5px,2px) rotate(45deg)}
+
+:focus-visible{outline:2px solid var(--sage-ink);outline-offset:2px}
+.ghost{position:fixed;pointer-events:none;z-index:50;opacity:.9;box-shadow:0 6px 18px rgba(0,0,0,.18);transform:rotate(-2deg)}
+.dragging-src{opacity:.35}
+.status{font-size:12px;color:var(--muted)}
+
+@media (max-width:820px){
+  .bottom{grid-template-columns:1fr}
+  .panel{border-right:0;border-bottom:1px solid var(--line)}
+  .add{margin-left:0;width:100%}
+  .add input{flex:1}
+}
+@media (prefers-reduced-motion:reduce){.cell{transition:none}.ghost{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="sheet">
+    <div class="top">
+      <div class="week">Week of <input id="week" type="text" placeholder="e.g. 28 Sep" aria-label="Week of"></div>
+      <span class="hint">Anchors first, then this week's choices</span>
+      <div class="tools">
+        <span class="status" id="status"></span>
+        <button class="btn" id="newWeek" title="Clears everything except anchors">New week</button>
+      </div>
+    </div>
+
+    <div class="tray" id="tray" data-drop="tray">
+      <span class="tray-label">Blocks</span>
+      <div id="chips" style="display:contents"></div>
+      <div class="add">
+        <input id="newLabel" type="text" placeholder="New block name" aria-label="New block name">
+        <div class="swatches" id="swatches"></div>
+        <button class="btn" id="addBtn">Add</button>
+      </div>
+    </div>
+
+    <div class="scroll"><div class="grid" id="grid"></div></div>
+
+    <div class="bottom">
+      <section class="panel">
+        <h2>Work projects</h2>
+        <div class="field"><label for="p0">Outcome:</label><input id="p0" data-k="projects.0"></div>
+        <div class="field"><label for="p1">Next step:</label><input id="p1" data-k="projects.1"></div>
+        <div class="field"><label for="p2">Next step:</label><input id="p2" data-k="projects.2"></div>
+      </section>
+      <section class="panel">
+        <h2>Habits</h2>
+        <div class="habits" id="habits"></div>
+      </section>
+      <section class="panel">
+        <h2>Skill focus</h2>
+        <div class="field"><label for="s0">Practise:</label><input id="s0" data-k="skill.0"></div>
+        <div class="field"><label for="s1">Make / finish:</label><input id="s1" data-k="skill.1"></div>
+        <div class="field"><label for="s2">Minimum:</label><input id="s2" data-k="skill.2"></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+const DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const ROWS=["Early morning","Morning","Afternoon","Later evening"];
+const KEY="weekly-planner-v1";
+const uid=()=>Math.random().toString(36).slice(2,9);
+
+const DEFAULT={
+  week:"",
+  library:[
+    {id:"l1",label:"Gym",k:1},{id:"l2",label:"Deep work",k:2},{id:"l3",label:"Clients",k:2},
+    {id:"l4",label:"Admin",k:6},{id:"l5",label:"Podcast",k:4},{id:"l6",label:"Family",k:3},
+    {id:"l7",label:"Rest",k:5}
+  ],
+  cells:{"3-4":[{id:"b1",label:"Gym",k:1,time:"",anchor:true}]},
+  projects:["","",""],
+  skill:["","",""],
+  habits:[
+    {name:"Maintain 1",days:[0,0,0,0,0,0,0]},
+    {name:"Maintain 2",days:[0,0,0,0,0,0,0]},
+    {name:"Grow 1",days:[0,0,0,0,0,0,0]}
+  ]
+};
+
+let state=load()||structuredClone(DEFAULT);
+let pickK=1;
+let db=null, docRef=null, saveTimer=null;
+
+function load(){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null}catch(e){return null}}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}
+  if(docRef){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(()=>{
+      docRef.set({json:JSON.stringify(state)}).then(()=>flash("Saved")).catch(()=>{});
+    },600);
+  }
+}
+function flash(t){const s=document.getElementById("status");s.textContent=t;clearTimeout(flash.t);flash.t=setTimeout(()=>s.textContent="",1500)}
+
+/* ---------- render ---------- */
+const grid=document.getElementById("grid");
+function renderGrid(){
+  grid.innerHTML="";
+  const todayIdx=(new Date().getDay()+6)%7;
+  grid.appendChild(el("div","h","Time"));
+  DAYS.forEach((d,i)=>grid.appendChild(el("div","h"+(i===todayIdx?" today":""),d.toUpperCase())));
+  ROWS.forEach((r,ri)=>{
+    grid.appendChild(el("div","rowh",r));
+    DAYS.forEach((d,di)=>{
+      const c=el("div","cell");
+      c.dataset.drop=ri+"-"+di;
+      c.setAttribute("aria-label",d+" "+r);
+      (state.cells[ri+"-"+di]||[]).forEach(b=>c.appendChild(blockEl(b,ri+"-"+di)));
+      grid.appendChild(c);
+    });
+  });
+}
+function blockEl(b,cellKey){
+  const d=el("div","block k"+b.k+(b.anchor?" anchor":""));
+  d.dataset.bid=b.id; d.dataset.from=cellKey;
+  const t=el("span","t",b.label);
+  t.title="Double-click to rename";
+  t.addEventListener("dblclick",()=>{t.contentEditable="true";t.focus();document.getSelection().selectAllChildren(t)});
+  t.addEventListener("blur",()=>{t.contentEditable="false";b.label=t.textContent.trim()||b.label;t.textContent=b.label;save()});
+  t.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();t.blur()}});
+  const s=el("div","s");
+  const pin=el("button","pin",b.anchor?"Weekly anchor":"Make anchor");
+  pin.title="Anchors stay when you start a new week";
+  pin.addEventListener("click",()=>{b.anchor=!b.anchor;save();renderGrid()});
+  const tl=el("span","","Time:");
+  const ti=document.createElement("input");ti.value=b.time||"";ti.setAttribute("aria-label","Time");
+  ti.addEventListener("input",()=>{b.time=ti.value;save()});
+  s.append(tl,ti);
+  const s2=el("div","s");s2.appendChild(pin);
+  const del=el("button","del","×");del.setAttribute("aria-label","Remove "+b.label);
+  del.addEventListener("click",()=>{removeBlock(cellKey,b.id);save();renderGrid()});
+  d.append(t,s,s2,del);
+  makeDraggable(d,{type:"block",cell:cellKey,id:b.id});
+  return d;
+}
+function renderTray(){
+  const box=document.getElementById("chips");box.innerHTML="";
+  state.library.forEach(l=>{
+    const c=el("div","chip k"+l.k,"");
+    c.append(document.createTextNode(l.label));
+    const x=el("button","x","×");x.setAttribute("aria-label","Delete "+l.label+" from blocks");
+    x.addEventListener("click",()=>{state.library=state.library.filter(v=>v.id!==l.id);save();renderTray()});
+    c.appendChild(x);
+    c.title="Drag onto the week";
+    makeDraggable(c,{type:"lib",id:l.id});
+    box.appendChild(c);
+  });
+  const sw=document.getElementById("swatches");sw.innerHTML="";
+  for(let k=1;k<=6;k++){
+    const b=el("button","sw k"+k);b.setAttribute("aria-label","Colour "+k);
+    b.setAttribute("aria-pressed",k===pickK);
+    b.addEventListener("click",()=>{pickK=k;renderTray()});
+    sw.appendChild(b);
+  }
+}
+function renderHabits(){
+  const h=document.getElementById("habits");h.innerHTML="";
+  h.appendChild(el("span",""));
+  "MTWTFSS".split("").forEach(c=>h.appendChild(el("span","dl",c)));
+  state.habits.forEach((hb,hi)=>{
+    const n=document.createElement("input");n.type="text";n.value=hb.name;n.setAttribute("aria-label","Habit name");
+    n.addEventListener("input",()=>{hb.name=n.value;save()});
+    h.appendChild(n);
+    hb.days.forEach((v,di)=>{
+      const b=el("button","box");b.setAttribute("aria-pressed",!!v);
+      b.setAttribute("aria-label",hb.name+" "+DAYS[di]);
+      b.addEventListener("click",()=>{hb.days[di]=hb.days[di]?0:1;b.setAttribute("aria-pressed",!!hb.days[di]);save()});
+      h.appendChild(b);
+    });
+  });
+}
+function renderFields(){
+  document.getElementById("week").value=state.week||"";
+  document.querySelectorAll("[data-k]").forEach(i=>{const[a,b]=i.dataset.k.split(".");i.value=state[a][b]||""});
+}
+function renderAll(){renderFields();renderTray();renderGrid();renderHabits()}
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+
+/* ---------- state ops ---------- */
+function removeBlock(cell,id){
+  const arr=state.cells[cell]||[];const i=arr.findIndex(b=>b.id===id);
+  if(i<0)return null;const [b]=arr.splice(i,1);if(!arr.length)delete state.cells[cell];return b;
+}
+function drop(src,target){
+  if(!target)return;
+  if(target==="tray"){ if(src.type==="block"){removeBlock(src.cell,src.id)} }
+  else if(src.type==="lib"){
+    const l=state.library.find(v=>v.id===src.id);if(!l)return;
+    (state.cells[target]=state.cells[target]||[]).push({id:uid(),label:l.label,k:l.k,time:"",anchor:false});
+  } else if(src.type==="block"){
+    if(src.cell===target)return;
+    const b=removeBlock(src.cell,src.id);if(b)(state.cells[target]=state.cells[target]||[]).push(b);
+  }
+  save();renderGrid();
+}
+
+/* ---------- pointer drag (mouse + touch) ---------- */
+let drag=null;
+function makeDraggable(node,src){
+  node.addEventListener("pointerdown",e=>{
+    if(e.button!==0)return;
+    if(e.target.closest("input,button,[contenteditable=true]"))return;
+    drag={node,src,x:e.clientX,y:e.clientY,started:false,ghost:null,over:null};
+    node.setPointerCapture(e.pointerId);
+  });
+  node.addEventListener("pointermove",e=>{
+    if(!drag||drag.node!==node)return;
+    if(!drag.started){
+      if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)<5)return;
+      drag.started=true;
+      const r=node.getBoundingClientRect();
+      drag.ox=e.clientX-r.left;drag.oy=e.clientY-r.top;
+      const g=node.cloneNode(true);g.classList.add("ghost");g.style.width=r.width+"px";
+      document.body.appendChild(g);drag.ghost=g;
+      if(src.type==="block"){node.classList.add("dragging-src");document.getElementById("tray").classList.add("drop-bin")}
+    }
+    drag.ghost.style.left=(e.clientX-drag.ox)+"px";
+    drag.ghost.style.top=(e.clientY-drag.oy)+"px";
+    const t=document.elementFromPoint(e.clientX,e.clientY);
+    const z=t&&t.closest("[data-drop]");
+    const valid=z&&(z.dataset.drop!=="tray"||src.type==="block")?z:null;
+    if(drag.over&&drag.over!==valid)drag.over.classList.remove("over");
+    if(valid&&valid.classList.contains("cell"))valid.classList.add("over");
+    drag.over=valid;
+  });
+  const end=e=>{
+    if(!drag||drag.node!==node)return;
+    const d=drag;drag=null;
+    if(!d.started)return;
+    d.ghost.remove();node.classList.remove("dragging-src");
+    document.getElementById("tray").classList.remove("drop-bin");
+    if(d.over){d.over.classList.remove("over");drop(src,d.over.dataset.drop)}
+  };
+  node.addEventListener("pointerup",end);
+  node.addEventListener("pointercancel",end);
+}
+
+/* ---------- inputs ---------- */
+document.getElementById("week").addEventListener("input",e=>{state.week=e.target.value;save()});
+document.querySelectorAll("[data-k]").forEach(i=>i.addEventListener("input",()=>{const[a,b]=i.dataset.k.split(".");state[a][b]=i.value;save()}));
+function addBlock(){
+  const i=document.getElementById("newLabel");const v=i.value.trim();if(!v)return;
+  state.library.push({id:uid(),label:v,k:pickK});i.value="";save();renderTray();
+}
+document.getElementById("addBtn").addEventListener("click",addBlock);
+document.getElementById("newLabel").addEventListener("keydown",e=>{if(e.key==="Enter")addBlock()});
+document.getElementById("newWeek").addEventListener("click",()=>{
+  const kept={};
+  Object.entries(state.cells).forEach(([k,arr])=>{const a=arr.filter(b=>b.anchor);if(a.length)kept[k]=a});
+  state.cells=kept;state.week="";
+  state.projects=["","",""];state.skill=["","",""];
+  state.habits.forEach(h=>h.days=[0,0,0,0,0,0,0]);
+  save();renderAll();flash("New week started");
+});
+
+renderAll();
+
+/* ---------- sync across devices when available ---------- */
+(async()=>{
+  try{
+    if(!window.claude||!window.claude.use)return;
+    const [d,u]=await Promise.all([claude.use("db"),claude.use("user")]);
+    if(!d||!u)return;
+    const id=await u.id();if(!id)return;
+    db=d;docRef=db.doc("data/users/"+id+"/planner");
+    const snap=await docRef.get();
+    if(snap.exists){
+      const j=snap.data().json;
+      if(typeof j==="string"){state=JSON.parse(j);try{localStorage.setItem(KEY,j)}catch(e){}renderAll()}
+    }else{save()}
+  }catch(e){}
+})();
+})();
+</script>
+</body>
+</html>
