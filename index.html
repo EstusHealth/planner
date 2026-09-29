@@ -100,6 +100,55 @@ button,input{font:inherit;color:inherit}
 .k5{background:var(--c5);color:var(--c5i)} .k6{background:var(--c6);color:var(--c6i)}
 .block.anchor{box-shadow:inset 3px 0 0 currentColor}
 
+/* transitions */
+.chip.tchip{background:transparent;border:1px dashed var(--muted);color:var(--ink)}
+.chip svg,.trans svg,.gap-add svg{width:13px;height:13px;flex:none}
+.trans{border:1px dashed var(--muted);border-radius:6px;margin-bottom:6px;position:relative;font-size:12.5px;color:var(--muted);background:var(--paper);touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.trans .tr-head{display:flex;flex-wrap:wrap;align-items:center;gap:0 6px;padding:4px 22px 4px 7px;border-radius:5px;cursor:pointer}
+.trans .tr-head:hover{background:var(--hover)}
+.trans .tn{flex:1;font-weight:600;color:var(--ink);min-width:0;word-break:break-word}
+.trans .tm{flex-basis:100%;padding-left:19px;font-size:11.5px;font-variant-numeric:tabular-nums}
+.trans .tm:empty{display:none}
+.trans.done{border-style:solid;border-color:var(--sage-ink);background:var(--sage)}
+.trans.done .tn,.trans.done{color:var(--sage-ink)}
+.trans ul{list-style:none;margin:0;padding:0 8px 6px 26px}
+.trans li{padding:2px 0;color:var(--ink)}
+.trans li label{display:flex;gap:6px;align-items:flex-start;cursor:pointer}
+.trans li input{margin:2px 0 0;accent-color:var(--sage-ink)}
+.trans .del{position:absolute;top:5px;right:4px;border:0;background:none;cursor:pointer;opacity:0;font-size:14px;line-height:1;color:inherit}
+.trans:hover .del,.trans:focus-within .del{opacity:.6}
+.gap-add{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;border:0;background:none;color:var(--muted);font-size:11.5px;padding:0;margin:-4px 0 2px;height:16px;cursor:pointer;opacity:0;border-radius:4px}
+.cell:hover .gap-add,.gap-add:focus-visible{opacity:.75}
+.gap-add:hover{background:var(--hover);color:var(--sage-ink);opacity:1}
+@media (hover:none){.gap-add{opacity:.55}}
+.drop-line{height:3px;border-radius:2px;background:var(--sage-ink);margin:-4px 0 1px;pointer-events:none}
+
+/* transition routine designer */
+.routines{border-bottom:1px solid var(--line)}
+.routines>summary{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;cursor:pointer;list-style:none}
+.routines>summary::-webkit-details-marker{display:none}
+.routines>summary h2{font-size:17px;font-weight:500;margin:0;letter-spacing:.02em}
+.routines .chev{width:16px;height:16px;color:var(--muted);transition:transform .15s;margin-left:auto}
+.routines[open] .chev{transform:rotate(180deg)}
+.rgrid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.rcard{padding:12px 16px 16px;border-right:1px solid var(--line);min-width:0;display:flex;flex-direction:column}
+.rcard:last-child{border-right:0}
+.rsec{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.rname{width:100%;border:0;border-bottom:1px solid transparent;background:transparent;font-weight:600;font-size:15px;padding:2px 0;margin:2px 0 6px}
+.rname:hover,.rname:focus,.rsteps input:hover,.rsteps input:focus{border-bottom-color:var(--line)}
+.rmins{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.rmins input{width:52px;border:1px solid var(--line);border-radius:5px;background:var(--paper);padding:2px 6px;font-size:13px}
+.rsteps{list-style:none;margin:0;padding:0;counter-reset:step}
+.rsteps li{display:flex;align-items:center;gap:6px;padding:1px 0;counter-increment:step}
+.rsteps li::before{content:counter(step);font-size:11px;color:var(--muted);width:14px;text-align:right;flex:none;font-variant-numeric:tabular-nums}
+.rsteps input{flex:1;min-width:0;border:0;border-bottom:1px solid transparent;background:transparent;padding:2px 0;font-size:14px}
+.xbtn{border:0;background:none;cursor:pointer;opacity:.3;color:var(--muted);font-size:14px;padding:0 2px;line-height:1}
+.xbtn:hover,.xbtn:focus-visible{opacity:1}
+.ractions{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:auto;padding-top:10px}
+.ractions .btn{padding:4px 10px;font-size:13px}
+.rused{font-size:12px;color:var(--muted)}
+.rcard .linkbtn{align-self:flex-start;margin-top:6px}
+
 /* grid */
 .scroll{overflow-x:auto}
 .grid{display:grid;grid-template-columns:120px repeat(7,minmax(128px,1fr));min-width:1020px}
@@ -181,7 +230,9 @@ button,input{font:inherit;color:inherit}
 .status{font-size:12px;color:var(--muted)}
 
 @media (max-width:820px){
-  .bottom,.insights{grid-template-columns:1fr}
+  .bottom,.insights,.rgrid{grid-template-columns:1fr}
+  .rcard{border-right:0;border-bottom:1px solid var(--line)}
+  .rcard:last-child{border-bottom:0}
   .panel{border-right:0;border-bottom:1px solid var(--line)}
   .insights .maker{border-right:0;border-bottom:1px solid var(--line)}
   .add{margin-left:0;width:100%}
@@ -197,7 +248,7 @@ button,input{font:inherit;color:inherit}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{background:#fff;font-size:11px}
   .wrap{padding:0;max-width:none}
-  .hint,.tools,.tray,.block .del,.block:not(.anchor) .pin,.linkbtn{display:none!important}
+  .hint,.tools,.tray,.block .del,.block:not(.anchor) .pin,.linkbtn,.gap-add,.trans .del,.routines{display:none!important}
   .habits .rm{visibility:hidden}
   .week input::-webkit-calendar-picker-indicator{display:none}
   .block .s:has(input:placeholder-shown){display:none}
@@ -280,6 +331,15 @@ button,input{font:inherit;color:inherit}
       </div>
     </div>
 
+    <details class="routines" id="routines" open>
+      <summary>
+        <h2>Transition routines</h2>
+        <span class="note">One per section · hover between blocks and tap +, or drag ↻ Transition from Blocks</span>
+        <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </summary>
+      <div class="rgrid" id="rgrid"></div>
+    </details>
+
     <div class="bottom">
       <section class="panel">
         <h2>Work projects</h2>
@@ -338,9 +398,21 @@ const DEFAULT={
     {name:"Grow 1",days:[0,0,0,0,0,0,0]}
   ],
   makerTypes:["deep work"],
-  makerTarget:8
+  makerTarget:8,
+  routines:[ // one transition routine per section, same order as ROWS
+    {name:"Wake-up reset",mins:10,steps:["Glass of water","Make the bed","Glance at today's plan"]},
+    {name:"Focus startup",mins:5,steps:["Clear the desk","Close email and chat","Write the one outcome for this block"]},
+    {name:"Midday reset",mins:10,steps:["Step outside or stretch","Capture loose ends","Re-read the afternoon plan"]},
+    {name:"Shutdown ritual",mins:15,steps:["Get inbox and notes to zero","Plan tomorrow's first block","Say “shutdown complete”"]}
+  ]
 };
 const SLOTS=ROWS.length*DAYS.length;
+const TRANS="__transition"; // tray id for the transition chip
+const isT=b=>b.type==="t";
+const rowOf=cellKey=>+cellKey.split("-")[0];
+const routineFor=cellKey=>state.routines[rowOf(cellKey)];
+const newTransition=()=>({id:uid(),type:"t",done:[]});
+const LOOP='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.2 8.5A5.2 5.2 0 1 1 11.7 4.3M12.2 1.8v2.9H9.3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const tkey=label=>String(label).trim().toLowerCase(); // blocks with the same name count as one type
 const isMaker=label=>state.makerTypes.includes(tkey(label));
 
@@ -355,7 +427,9 @@ function normalize(s){
   const cells={};
   Object.entries(o.cells).forEach(([key,arr])=>{
     if(!/^[0-3]-[0-6]$/.test(key)||!Array.isArray(arr))return;
-    const a=arr.filter(b=>b&&typeof b==="object").map(b=>({id:String(b.id||uid()),label:String(b.label||"Block"),k:k(b.k),time:String(b.time||""),anchor:!!b.anchor}));
+    const a=arr.filter(b=>b&&typeof b==="object").map(b=>b.type==="t"
+      ?{id:String(b.id||uid()),type:"t",done:Array.isArray(b.done)?b.done.filter(v=>typeof v==="string"):[]}
+      :{id:String(b.id||uid()),label:String(b.label||"Block"),k:k(b.k),time:String(b.time||""),anchor:!!b.anchor});
     if(a.length)cells[key]=a;
   });
   o.cells=cells;
@@ -366,12 +440,18 @@ function normalize(s){
   if(!Array.isArray(o.makerTypes))o.makerTypes=[...DEFAULT.makerTypes];
   o.makerTypes=[...new Set(o.makerTypes.filter(v=>typeof v==="string").map(tkey).filter(Boolean))];
   o.makerTarget=Number.isFinite(+o.makerTarget)?Math.max(0,Math.min(SLOTS,Math.round(+o.makerTarget))):DEFAULT.makerTarget;
+  o.routines=ROWS.map((_,i)=>{
+    const d=DEFAULT.routines[i],r=Array.isArray(o.routines)&&o.routines[i]&&typeof o.routines[i]==="object"?o.routines[i]:d;
+    return {name:String(r.name??d.name),mins:Number.isFinite(+r.mins)?Math.max(0,Math.min(240,Math.round(+r.mins))):d.mins,
+      steps:Array.isArray(r.steps)?r.steps.map(String):[...d.steps]};
+  });
   delete o.week;
   return o;
 }
 
 let state=normalize(load())||normalize({});
 let pickK=1, armed=null, dragEndAt=0;
+const openT=new Set(); // transitions whose checklist is expanded (view state only)
 let db=null, docRef=null, saveTimer=null, downloads=null;
 const hist=[];
 
@@ -414,8 +494,11 @@ function renderGrid(){
       const key=ri+"-"+di,c=el("div","cell");
       c.dataset.drop=key;
       c.setAttribute("aria-label",DAY_NAMES[di]+" "+r);
-      (state.cells[key]||[]).forEach(b=>c.appendChild(blockEl(b,key)));
-      c.addEventListener("click",e=>{if(armed&&!e.target.closest(".block"))placeArmed(key)});
+      (state.cells[key]||[]).forEach((b,i)=>{
+        if(needsTransition(key,i))c.appendChild(gapAdd(key,i));
+        c.appendChild(isT(b)?transEl(b,key):blockEl(b,key));
+      });
+      c.addEventListener("click",e=>{if(armed&&!e.target.closest("input,button,label,[contenteditable=true],.tr-head"))placeArmed(key,dropIndex(c,e.clientY))});
       c.addEventListener("keydown",e=>{
         if(armed&&e.target===c&&(e.key==="Enter"||e.key===" ")){e.preventDefault();placeArmed(key);grid.querySelector('[data-drop="'+key+'"]').focus()}
       });
@@ -425,10 +508,61 @@ function renderGrid(){
   applyPlacing();
   renderInsights();
 }
+/* a "+" slot is offered between two blocks, and at the top of a section when the section above it that day has blocks */
+function needsTransition(key,i){
+  const items=state.cells[key]||[];
+  if(!items[i]||isT(items[i]))return false;
+  if(i>0)return !isT(items[i-1]);
+  const [ri,di]=key.split("-").map(Number);
+  return ri>0&&(state.cells[(ri-1)+"-"+di]||[]).some(b=>!isT(b));
+}
+function gapAdd(key,i){
+  const r=routineFor(key),b=el("button","gap-add");
+  b.innerHTML=LOOP;b.append(document.createTextNode(r.name||"Transition"));
+  b.setAttribute("aria-label","Add "+(r.name||"transition")+" here");
+  b.title=i?"Add a transition between these blocks":"Add a transition into "+ROWS[rowOf(key)].toLowerCase();
+  b.addEventListener("click",()=>{snap();insertAt(key,i,newTransition());save();renderGrid()});
+  return b;
+}
+function transEl(b,key){
+  const r=routineFor(key),open=openT.has(b.id);
+  const d=el("div","item trans");d.dataset.bid=b.id;
+  const head=el("div","tr-head");head.tabIndex=0;head.setAttribute("role","button");head.setAttribute("aria-expanded",open);
+  head.innerHTML=LOOP;
+  const tm=el("span","tm");
+  head.append(el("span","tn",r.name||"Transition"),tm);
+  const paint=()=>{
+    const steps=r.steps.filter(s=>s.trim()),done=steps.filter(s=>b.done.includes(s)).length;
+    tm.textContent=[steps.length?done+"/"+steps.length:"",r.mins?r.mins+" min":""].filter(Boolean).join(" · ");
+    d.classList.toggle("done",!!steps.length&&done===steps.length);
+    head.title=(steps.length?steps.join(" → "):"No steps yet — design it under Transition routines")+"\nClick to open the checklist · drag to move";
+  };
+  paint();
+  const toggle=()=>{open?openT.delete(b.id):openT.add(b.id);renderGrid();grid.querySelector('[data-bid="'+b.id+'"] .tr-head')?.focus()};
+  head.addEventListener("click",()=>{if(Date.now()-dragEndAt>350)toggle()});
+  head.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}});
+  d.appendChild(head);
+  if(open){
+    const ul=el("ul"),steps=r.steps.filter(s=>s.trim());
+    if(!steps.length)ul.appendChild(el("li","","No steps yet — add them under Transition routines"));
+    steps.forEach(s=>{
+      const li=el("li"),lab=el("label"),cb=document.createElement("input");
+      cb.type="checkbox";cb.checked=b.done.includes(s);
+      cb.addEventListener("change",()=>{b.done=cb.checked?[...b.done,s]:b.done.filter(v=>v!==s);save();paint()});
+      lab.append(cb,document.createTextNode(s));li.appendChild(lab);ul.appendChild(li);
+    });
+    d.appendChild(ul);
+  }
+  const del=el("button","del","×");del.setAttribute("aria-label","Remove transition");
+  del.addEventListener("click",()=>{snap();removeBlock(key,b.id);openT.delete(b.id);save();renderGrid()});
+  d.appendChild(del);
+  makeDraggable(d,{type:"block",cell:key,id:b.id});
+  return d;
+}
 function blockEl(b,cellKey){
-  const d=el("div","block k"+b.k+(b.anchor?" anchor":""));
+  const d=el("div","item block k"+b.k+(b.anchor?" anchor":""));
   d.dataset.bid=b.id; d.dataset.from=cellKey;
-  d.title="Drag to move · Alt-drag to copy · drop on Blocks to remove";
+  d.title="Drag to move or reorder · Alt-drag to copy · drop on Blocks to remove";
   const t=el("span","t",b.label);
   t.title="Double-click to rename";
   t.addEventListener("dblclick",()=>{t.contentEditable="true";t.focus();document.getSelection().selectAllChildren(t)});
@@ -456,17 +590,22 @@ function blockEl(b,cellKey){
 }
 function renderTray(){
   const box=document.getElementById("chips");box.innerHTML="";
+  const armable=(c,id)=>{
+    c.tabIndex=0;c.setAttribute("role","button");c.setAttribute("aria-pressed",armed===id);c.dataset.arm=id;
+    c.addEventListener("click",e=>{if(e.target.closest(".x")||Date.now()-dragEndAt<350)return;setArmed(armed===id?null:id)});
+    c.addEventListener("keydown",e=>{if(e.target===c&&(e.key==="Enter"||e.key===" ")){e.preventDefault();setArmed(armed===id?null:id);[...box.children].find(n=>n.dataset.arm===id)?.focus()}});
+  };
+  const tc=el("div","chip tchip");tc.innerHTML=LOOP;tc.append(document.createTextNode("Transition"));
+  tc.title="Drag between blocks (or tap, then tap a spot) — uses that section's routine";
+  armable(tc,TRANS);makeDraggable(tc,{type:"trans"});box.appendChild(tc);
   state.library.forEach(l=>{
     const c=el("div","chip k"+l.k,"");
     c.append(document.createTextNode(l.label));
-    c.tabIndex=0;c.setAttribute("role","button");c.setAttribute("aria-pressed",armed===l.id);
     const x=el("button","x","×");x.setAttribute("aria-label","Delete "+l.label+" from blocks");
     x.addEventListener("click",()=>{snap();state.library=state.library.filter(v=>v.id!==l.id);if(armed===l.id)armed=null;save();renderTray();applyPlacing()});
     c.appendChild(x);
     c.title="Drag onto the week, or tap then tap a slot";
-    c.addEventListener("click",e=>{if(e.target.closest(".x")||Date.now()-dragEndAt<350)return;setArmed(armed===l.id?null:l.id)});
-    c.addEventListener("keydown",e=>{if(e.target===c&&(e.key==="Enter"||e.key===" ")){e.preventDefault();setArmed(armed===l.id?null:l.id);document.querySelector(".chip[aria-pressed=true]")?.focus()}});
-    makeDraggable(c,{type:"lib",id:l.id});
+    armable(c,l.id);makeDraggable(c,{type:"lib",id:l.id});
     box.appendChild(c);
   });
   const sw=document.getElementById("swatches");sw.innerHTML="";
@@ -482,8 +621,10 @@ function weekStats(){
   const types=new Map();
   const typeOf=(label,k)=>{const key=tkey(label);if(!types.has(key))types.set(key,{key,label:label.trim(),k,cells:0});return types.get(key)};
   state.library.forEach(l=>typeOf(l.label,l.k));
-  let used=0,maker=0,anchors=0;const map={};
-  Object.entries(state.cells).forEach(([ck,arr])=>{
+  let used=0,maker=0,anchors=0,trans=0,transMins=0;const map={},transByRow=ROWS.map(()=>0);
+  Object.entries(state.cells).forEach(([ck,items])=>{
+    const arr=items.filter(b=>!isT(b)),t=items.length-arr.length;
+    trans+=t;transMins+=t*state.routines[rowOf(ck)].mins;transByRow[rowOf(ck)]+=t;
     if(!arr.length)return;
     used++;anchors+=arr.filter(b=>b.anchor).length;
     const keys=new Set(arr.map(b=>typeOf(b.label,b.k).key));
@@ -493,7 +634,7 @@ function weekStats(){
     map[ck]=mk?"mk":"used";
   });
   const list=[...types.values()].sort((a,b)=>b.cells-a.cells||a.label.localeCompare(b.label));
-  return {types:list,used,maker,anchors,map};
+  return {types:list,used,maker,anchors,map,trans,transMins,transByRow};
 }
 function renderInsights(){
   const st=weekStats(),target=state.makerTarget;
@@ -516,7 +657,9 @@ function renderInsights(){
     DAYS.forEach((_,di)=>{const i=el("i",st.map[ri+"-"+di]||"");i.title=DAY_NAMES[di]+" "+ROWS[ri];mini.appendChild(i)});
   });
   /* breakdown */
-  document.getElementById("usedNote").textContent=st.used+" of "+SLOTS+" slots used"+(st.anchors?" · "+st.anchors+" anchor"+(st.anchors===1?"":"s"):"");
+  document.getElementById("usedNote").textContent=st.used+" of "+SLOTS+" slots used"+(st.anchors?" · "+st.anchors+" anchor"+(st.anchors===1?"":"s"):"")
+    +(st.trans?" · "+st.trans+" transition"+(st.trans===1?"":"s")+(st.transMins?" ("+fmtMins(st.transMins)+")":""):"");
+  document.querySelectorAll("#rgrid .rused").forEach((s,ri)=>s.textContent=st.transByRow[ri]?"Used "+st.transByRow[ri]+"× this week":"Not used this week");
   const rows=document.getElementById("brows");rows.innerHTML="";
   const max=Math.max(1,...st.types.map(t=>t.cells));
   st.types.forEach(t=>{
@@ -534,6 +677,63 @@ function renderInsights(){
     rows.append(tg,el("span","btype k"+t.k,t.label),track,el("span","bcount"+(t.cells?"":" zero"),t.cells));
   });
 }
+const fmtMins=m=>m<60?m+" min":Math.floor(m/60)+" h"+(m%60?" "+m%60+" min":"");
+
+/* ---------- transition routine designer ---------- */
+function renderRoutines(){
+  const g=document.getElementById("rgrid");g.innerHTML="";
+  state.routines.forEach((r,ri)=>{
+    const card=el("div","rcard");
+    card.appendChild(el("div","rsec",ROWS[ri]));
+    const name=document.createElement("input");name.className="rname";name.value=r.name;name.placeholder="Name this routine";
+    name.setAttribute("aria-label",ROWS[ri]+" transition name");
+    name.addEventListener("input",()=>{r.name=name.value;save();renderGrid()});
+    const mins=el("label","rmins","Takes "),mi=document.createElement("input");
+    mi.type="number";mi.min=0;mi.max=240;mi.step=5;mi.value=r.mins;mi.setAttribute("aria-label",ROWS[ri]+" transition minutes");
+    mi.addEventListener("input",()=>{r.mins=Math.max(0,Math.min(240,Math.round(+mi.value)||0));save();renderGrid()});
+    mins.append(mi,document.createTextNode("min"));
+    const ul=el("ul","rsteps");
+    r.steps.forEach((s,si)=>{
+      const li=el("li"),inp=document.createElement("input");inp.value=s;inp.placeholder="Step";
+      inp.setAttribute("aria-label",ROWS[ri]+" step "+(si+1));
+      // keep ticks on existing transitions when a step is reworded
+      inp.addEventListener("input",()=>{
+        const old=r.steps[si];r.steps[si]=inp.value;
+        Object.entries(state.cells).forEach(([k,a])=>{if(rowOf(k)===ri)a.forEach(b=>{if(isT(b))b.done=b.done.map(v=>v===old?inp.value:v)})});
+        save();renderGrid();
+      });
+      inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();addStep(ri,si+1)}});
+      const rm=el("button","xbtn","×");rm.setAttribute("aria-label","Remove step "+(si+1));
+      rm.addEventListener("click",()=>{r.steps.splice(si,1);save();renderRoutines();renderGrid()});
+      li.append(inp,rm);ul.appendChild(li);
+    });
+    const add=el("button","linkbtn","+ Add step");add.addEventListener("click",()=>addStep(ri,r.steps.length));
+    const acts=el("div","ractions"),fill=el("button","btn","Add between blocks");
+    fill.title="Adds this routine to every gap between blocks in "+ROWS[ri].toLowerCase()+" this week";
+    fill.addEventListener("click",()=>fillGaps(ri));
+    acts.append(fill,el("span","rused"));
+    card.append(name,mins,ul,add,acts);
+    g.appendChild(card);
+  });
+  renderInsights();
+}
+function addStep(ri,at){
+  state.routines[ri].steps.splice(at,0,"");save();renderRoutines();
+  document.querySelectorAll("#rgrid .rcard")[ri].querySelectorAll(".rsteps input")[at]?.focus();
+}
+function fillGaps(ri){
+  snap();let n=0;
+  DAYS.forEach((_,di)=>{
+    const key=ri+"-"+di;
+    for(let i=(state.cells[key]||[]).length-1;i>=0;i--)if(needsTransition(key,i)){insertAt(key,i,newTransition());n++}
+  });
+  if(!n){hist.pop();flash("No gaps between blocks in "+ROWS[ri].toLowerCase(),2500);return}
+  save();renderGrid();flash("Added "+n+" transition"+(n===1?"":"s"),2500);
+}
+const routinesEl=document.getElementById("routines");
+try{if(localStorage.getItem("weekly-planner-routines-open")==="0")routinesEl.open=false}catch(e){}
+routinesEl.addEventListener("toggle",()=>{try{localStorage.setItem("weekly-planner-routines-open",routinesEl.open?"1":"0")}catch(e){}});
+
 function setTarget(n){state.makerTarget=Math.max(0,Math.min(SLOTS,n));save();renderInsights()}
 document.getElementById("tDown").addEventListener("click",()=>setTarget(state.makerTarget-1));
 document.getElementById("tUp").addEventListener("click",()=>setTarget(state.makerTarget+1));
@@ -565,85 +765,118 @@ function renderFields(){
   document.getElementById("week").value=state.weekStart;
   document.querySelectorAll("[data-k]").forEach(i=>{const[a,b]=i.dataset.k.split(".");i.value=state[a][b]||""});
 }
-function renderAll(){renderFields();renderTray();renderGrid();renderHabits()}
+function renderAll(){renderFields();renderTray();renderGrid();renderHabits();renderRoutines()}
 function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
 
 /* ---------- tap-to-place ---------- */
 function setArmed(id){armed=id;renderTray();applyPlacing()}
 function applyPlacing(){
-  const l=state.library.find(v=>v.id===armed);if(!l)armed=null;
+  const l=armed===TRANS?null:state.library.find(v=>v.id===armed);if(!l&&armed!==TRANS)armed=null;
   grid.classList.toggle("placing",!!armed);
   grid.querySelectorAll(".cell").forEach(c=>armed?c.tabIndex=0:c.removeAttribute("tabindex"));
-  document.getElementById("placeHint").textContent=l?"Tap a slot to add “"+l.label+"” · Esc when done":"";
+  document.getElementById("placeHint").textContent=armed===TRANS?"Tap between blocks to add that section's transition · Esc when done"
+    :l?"Tap a slot to add “"+l.label+"” · Esc when done":"";
 }
-function placeArmed(key){snap();if(addFromLibrary(armed,key)){save();renderGrid()}else hist.pop()}
+function placeArmed(key,index){snap();if(addFromLibrary(armed,key,index)){save();renderGrid()}else hist.pop()}
 
 /* ---------- state ops ---------- */
 function removeBlock(cell,id){
   const arr=state.cells[cell]||[];const i=arr.findIndex(b=>b.id===id);
   if(i<0)return null;const [b]=arr.splice(i,1);if(!arr.length)delete state.cells[cell];return b;
 }
-function addFromLibrary(libId,cell){
+function insertAt(cell,index,item){
+  const arr=state.cells[cell]=state.cells[cell]||[];
+  arr.splice(index==null?arr.length:Math.max(0,Math.min(index,arr.length)),0,item);
+}
+function addFromLibrary(libId,cell,index){
+  if(libId===TRANS){insertAt(cell,index,newTransition());return true}
   const l=state.library.find(v=>v.id===libId);if(!l)return false;
-  (state.cells[cell]=state.cells[cell]||[]).push({id:uid(),label:l.label,k:l.k,time:"",anchor:false});
+  insertAt(cell,index,{id:uid(),label:l.label,k:l.k,time:"",anchor:false});
   return true;
 }
-function drop(src,target,copy){
+/* where in a cell's list a drop at height y lands, ignoring the item being dragged */
+function dropIndex(cellEl,y,skipId){
+  let i=0;
+  for(const n of cellEl.querySelectorAll(":scope>.item")){
+    if(n.dataset.bid===skipId)continue;
+    const r=n.getBoundingClientRect();if(y<r.top+r.height/2)return i;i++;
+  }
+  return i;
+}
+function drop(src,target,copy,index){
   if(!target)return;
   if(target==="tray"){ if(src.type!=="block")return; snap();removeBlock(src.cell,src.id) }
-  else if(src.type==="lib"){ snap();if(!addFromLibrary(src.id,target)){hist.pop();return} }
+  else if(src.type==="lib"||src.type==="trans"){ snap();if(!addFromLibrary(src.type==="trans"?TRANS:src.id,target,index)){hist.pop();return} }
   else if(src.type==="block"){
-    const b=(state.cells[src.cell]||[]).find(v=>v.id===src.id);
-    if(!b||(src.cell===target&&!copy))return;
-    snap();
-    if(copy)(state.cells[target]=state.cells[target]||[]).push({...b,id:uid(),anchor:false});
-    else{removeBlock(src.cell,src.id);(state.cells[target]=state.cells[target]||[]).push(b)}
+    const arr=state.cells[src.cell]||[],b=arr.find(v=>v.id===src.id);
+    if(!b)return;
+    if(copy){snap();insertAt(target,index,isT(b)?newTransition():{...b,id:uid(),anchor:false})}
+    else{
+      if(src.cell===target&&index===arr.indexOf(b))return;
+      snap();removeBlock(src.cell,src.id);insertAt(target,index,b);
+    }
   }
   save();renderGrid();
 }
 
 /* ---------- pointer drag (mouse + touch) ---------- */
 let drag=null;
+const dropLine=el("div","drop-line");
+function showDropLine(cellEl,index,skipId){
+  const items=[...cellEl.querySelectorAll(":scope>.item")].filter(n=>n.dataset.bid!==skipId);
+  const ref=items[index];
+  cellEl.insertBefore(dropLine,ref?(ref.previousElementSibling&&ref.previousElementSibling.classList.contains("gap-add")?ref.previousElementSibling:ref):null);
+}
+/* moves are tracked on the document (no pointer capture), so a drag that starts near an
+   item's edge still registers and plain clicks keep reaching the element under the pointer */
 function makeDraggable(node,src){
   node.addEventListener("pointerdown",e=>{
     if(e.button!==0)return;
-    if(e.target.closest("input,button,[contenteditable=true]"))return;
+    if(e.target.closest("input,button,label,[contenteditable=true]"))return;
     drag={node,src,x:e.clientX,y:e.clientY,started:false,ghost:null,over:null};
-    node.setPointerCapture(e.pointerId);
   });
-  node.addEventListener("pointermove",e=>{
-    if(!drag||drag.node!==node)return;
-    if(!drag.started){
-      if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)<5)return;
-      drag.started=true;
-      const r=node.getBoundingClientRect();
-      drag.ox=e.clientX-r.left;drag.oy=e.clientY-r.top;
-      const g=node.cloneNode(true);g.classList.add("ghost");g.style.width=r.width+"px";
-      document.body.appendChild(g);drag.ghost=g;
-      if(src.type==="block"){node.classList.add("dragging-src");document.getElementById("tray").classList.add("drop-bin")}
-    }
-    drag.ghost.style.left=(e.clientX-drag.ox)+"px";
-    drag.ghost.style.top=(e.clientY-drag.oy)+"px";
-    drag.ghost.classList.toggle("copy",src.type==="block"&&e.altKey);
-    const t=document.elementFromPoint(e.clientX,e.clientY);
-    const z=t&&t.closest("[data-drop]");
-    const valid=z&&(z.dataset.drop!=="tray"||src.type==="block")?z:null;
-    if(drag.over&&drag.over!==valid)drag.over.classList.remove("over");
-    if(valid&&valid.classList.contains("cell"))valid.classList.add("over");
-    drag.over=valid;
-  });
-  const end=e=>{
-    if(!drag||drag.node!==node)return;
-    const d=drag;drag=null;
-    if(!d.started)return;
-    dragEndAt=Date.now();
-    d.ghost.remove();node.classList.remove("dragging-src");
-    document.getElementById("tray").classList.remove("drop-bin");
-    if(d.over){d.over.classList.remove("over");drop(src,d.over.dataset.drop,e.altKey)}
-  };
-  node.addEventListener("pointerup",end);
-  node.addEventListener("pointercancel",end);
 }
+function endDrag(e,commit){
+  const d=drag;drag=null;
+  if(!d||!d.started)return;
+  dragEndAt=Date.now();
+  d.ghost.remove();d.node.classList.remove("dragging-src");dropLine.remove();
+  document.getElementById("tray").classList.remove("drop-bin");
+  if(!d.over)return;
+  d.over.classList.remove("over");
+  if(!commit)return;
+  const skip=d.src.type==="block"&&!e.altKey?d.src.id:null;
+  drop(d.src,d.over.dataset.drop,e.altKey,d.over.dataset.drop!=="tray"?dropIndex(d.over,e.clientY,skip):null);
+}
+document.addEventListener("pointermove",e=>{
+  if(!drag)return;
+  if(e.pointerType==="mouse"&&!e.buttons){endDrag(e,false);return} // button released outside the window
+  const {node,src}=drag;
+  if(!drag.started){
+    if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)<5)return;
+    drag.started=true;
+    const r=node.getBoundingClientRect();
+    drag.ox=e.clientX-r.left;drag.oy=e.clientY-r.top;
+    const g=node.cloneNode(true);g.classList.add("ghost");g.style.width=r.width+"px";
+    document.body.appendChild(g);drag.ghost=g;
+    if(src.type==="block"){node.classList.add("dragging-src");document.getElementById("tray").classList.add("drop-bin")}
+  }
+  drag.ghost.style.left=(e.clientX-drag.ox)+"px";
+  drag.ghost.style.top=(e.clientY-drag.oy)+"px";
+  drag.ghost.classList.toggle("copy",src.type==="block"&&e.altKey);
+  const t=document.elementFromPoint(e.clientX,e.clientY);
+  const z=t&&t.closest("[data-drop]");
+  const valid=z&&(z.dataset.drop!=="tray"||src.type==="block")?z:null;
+  if(drag.over&&drag.over!==valid)drag.over.classList.remove("over");
+  if(valid&&valid.classList.contains("cell")){
+    valid.classList.add("over");
+    const skip=src.type==="block"&&!e.altKey?src.id:null;
+    showDropLine(valid,dropIndex(valid,e.clientY,skip),skip);
+  }else dropLine.remove();
+  drag.over=valid;
+});
+document.addEventListener("pointerup",e=>endDrag(e,true));
+document.addEventListener("pointercancel",e=>endDrag(e,false));
 
 /* ---------- inputs ---------- */
 document.getElementById("week").addEventListener("change",e=>{
@@ -743,7 +976,9 @@ function toMarkdown(){
     L.push("## "+fmt(dayDate(di),{weekday:"long",day:"numeric",month:"short"}));
     let any=false;
     ROWS.forEach((r,ri)=>(state.cells[ri+"-"+di]||[]).forEach(b=>{
-      any=true;L.push("- **"+r+"** — "+b.label+(b.time?" ("+b.time+")":"")+(b.anchor?" · _anchor_":""));
+      any=true;
+      if(isT(b)){const t=state.routines[ri];L.push("- **"+r+"** — ↻ _"+(t.name||"Transition")+"_"+(t.mins?" ("+t.mins+" min)":""));return}
+      L.push("- **"+r+"** — "+b.label+(b.time?" ("+b.time+")":"")+(b.anchor?" · _anchor_":""));
     }));
     if(!any)L.push("- _Free_");
     L.push("");
@@ -753,6 +988,14 @@ function toMarkdown(){
   L.push("## Maker time","- "+st.maker+" cell"+(st.maker===1?"":"s")+(tgt?" · target "+tgt+" ("+(gap>0?gap+" to go":gap===0?"met":"met, "+(-gap)+" over")+")":""),"");
   L.push("## Breakdown","- "+st.used+" of "+SLOTS+" slots used");
   st.types.filter(t=>t.cells).forEach(t=>L.push("- "+t.label+": "+t.cells+" cell"+(t.cells===1?"":"s")+(state.makerTypes.includes(t.key)?" · _maker_":"")));
+  if(st.trans)L.push("- Transitions: "+st.trans+(st.transMins?" ("+fmtMins(st.transMins)+")":""));
+  L.push("");
+  L.push("## Transition routines");
+  state.routines.forEach((t,ri)=>{
+    const steps=t.steps.filter(s=>s.trim());
+    L.push("","### "+ROWS[ri]+" — "+(t.name||"Transition")+(t.mins?" ("+t.mins+" min)":""));
+    steps.length?steps.forEach((s,i)=>L.push((i+1)+". "+s)):L.push("_No steps yet_");
+  });
   L.push("");
   const list=(title,labels,vals)=>{
     if(!vals.some(v=>v.trim()))return;
@@ -770,7 +1013,11 @@ function toMarkdown(){
 function toCsv(){
   const q=v=>{v=String(v);if(/^[=+@]/.test(v))v="'"+v;return /[",\r\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
   const rows=[["Date","Day","Time of day","Block","Time","Anchor","Maker time"]];
-  blocksInOrder().forEach(({di,ri,b})=>rows.push([iso(dayDate(di)),DAY_NAMES[di],ROWS[ri],b.label,b.time,b.anchor?"yes":"",isMaker(b.label)?"yes":""]));
+  blocksInOrder().forEach(({di,ri,b})=>{
+    const t=state.routines[ri];
+    rows.push(isT(b)?[iso(dayDate(di)),DAY_NAMES[di],ROWS[ri],"Transition: "+(t.name||"Transition"),t.mins?t.mins+" min":"","",""]
+      :[iso(dayDate(di)),DAY_NAMES[di],ROWS[ri],b.label,b.time,b.anchor?"yes":"",isMaker(b.label)?"yes":""]);
+  });
   return "\ufeff"+rows.map(r=>r.map(q).join(",")).join("\r\n")+"\r\n";
 }
 
@@ -805,11 +1052,23 @@ function toIcs(){
   const stamp=new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
   const local=(di,mins)=>{const d=dayDate(di);d.setMinutes(mins);return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+"T"+pad(d.getHours())+pad(d.getMinutes())+"00"};
   const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Weekly planner//EN","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Weekly planner"];
+  const ev=(b,di,t,summary,desc)=>L.push("BEGIN:VEVENT","UID:"+b.id+"-"+state.weekStart+"@weekly-planner","DTSTAMP:"+stamp,
+    "DTSTART:"+local(di,t.s),"DTEND:"+local(di,t.e),"SUMMARY:"+esc(summary),"DESCRIPTION:"+esc(desc),"END:VEVENT");
   blocksInOrder().forEach(({di,ri,b})=>{
+    if(isT(b))return;
     const t=parseTime(b.time,ri)||{s:ROW_HOURS[ri][0]*60,e:ROW_HOURS[ri][1]*60};
-    L.push("BEGIN:VEVENT","UID:"+b.id+"-"+state.weekStart+"@weekly-planner","DTSTAMP:"+stamp,
-      "DTSTART:"+local(di,t.s),"DTEND:"+local(di,t.e),"SUMMARY:"+esc(b.label),
-      "DESCRIPTION:"+esc(ROWS[ri]+(b.time?" · "+b.time:"")+(b.anchor?" · weekly anchor":"")),"END:VEVENT");
+    ev(b,di,t,b.label,ROWS[ri]+(b.time?" · "+b.time:"")+(b.anchor?" · weekly anchor":""));
+  });
+  // transitions only get a time when they sit next to a block with an explicit time
+  Object.entries(state.cells).forEach(([key,items])=>{
+    const [ri,di]=key.split("-").map(Number),r=state.routines[ri],len=r.mins||10;
+    items.forEach((b,i)=>{
+      if(!isT(b))return;
+      const prev=items[i-1]&&!isT(items[i-1])&&parseTime(items[i-1].time,ri);
+      const next=items[i+1]&&!isT(items[i+1])&&parseTime(items[i+1].time,ri);
+      const t=prev?{s:prev.e,e:prev.e+len}:next?{s:next.s-len,e:next.s}:null;
+      if(t)ev(b,di,t,"↻ "+(r.name||"Transition"),r.steps.filter(s=>s.trim()).map((s,j)=>(j+1)+". "+s).join("\n"));
+    });
   });
   L.push("END:VCALENDAR");
   return L.map(fold).join("\r\n")+"\r\n";
@@ -817,7 +1076,7 @@ function toIcs(){
 
 const EXPORTS={
   print(){try{window.print()}catch(e){flash("Printing isn't available here",2500)}},
-  ics(){if(!blocksInOrder().length)return flash("Nothing to export yet");saveFile(fileBase()+".ics",toIcs(),"text/calendar")},
+  ics(){if(!blocksInOrder().some(x=>!isT(x.b)))return flash("Nothing to export yet");saveFile(fileBase()+".ics",toIcs(),"text/calendar")},
   csv(){saveFile(fileBase()+".csv",toCsv(),"text/csv")},
   md(){saveFile(fileBase()+".md",toMarkdown(),"text/markdown")},
   copy(){copyText(toMarkdown())},
